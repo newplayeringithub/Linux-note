@@ -1,0 +1,48 @@
+Acronyms you must know!
+PV – Physical Volume
+VG – Volume Group
+LV – Logical Volume
+
+Step to create LVM	
+	
+	
+1. Check LVM is installed	
+sudo yum list lvm*	
+
+2.check partition	  check partition is created if not create one
+lsblk	
+
+3.check pv,vg,lv	
+ls /usr/sbin/pv*	
+ls /usr/sbin/vg*	
+ls /usr/sbin/lv*	
+
+4.check physical volume and create physical volume	
+sudo pvcreate /dev/sdb1 /dev/sdc1	create two physical volume /dev/sdb1 and /dev/sdc1
+sudo pvdisplay	
+
+5. create volume group	
+sudo vgcreate vg1 /dev/sdb1 /dev/sdc1	create volume group name vg1 and attach two physical volume
+
+6.create logical volume	
+sudo lvcreate -L 1500G vg1 -n lv1	create logical volume size 1500G using volume group vg1 and name lv1
+
+7.format a logical volume disk	
+sudo mkfs.ext4 /dev/vg1/lv1	make file system ext4
+sudo mkdir /mnt/storage	make a dir
+sudo mount /dev/vg1/lv1 /mnt/storage	make a disk to dir
+	
+option:	
+8.Add hadrddisk to physical volume	
+sudo pvcreate /dev/sdd1	create a new physcial volume
+sudo vgextend vg1 /dev/sdd1	add to volume group
+
+9. add size to logical volume	
+sudo lvresize -L +1T /dev/vg1/lv1	resize file system
+sudo resize2fsj /dev/vg1/lv1	
+
+10.remove LVM become regular disk	
+sudo umount /mnt/storage	umount a dir
+sudo lvremore /dev/vg1/lv1	remove logical volume
+sudo vgremore /dev/vg1	remove volume group
+sudo pvremove /dev/sdb1 /dev/sdc1 /dev/sdd1	remove physical volume
