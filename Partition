@@ -1,0 +1,41 @@
+Create partiton step	
+"1.create partion
+2.mount file system
+3.mount disk
+4.mount to fdsk"	
+partition	
+old: MBR new:GPT	
+	
+1.check partition and modify MBR	
+lsblk	
+sudo fdisk -l /dev/sdb	
+press n	
+press p	
+press l	
++500G	
+press w	saved the modify
+	
+2.check partition and modify GPT	
+sudo gdisk /dev/sdc	
+press n	
+default	remain default
++500G	add 500G size
+press w	save the modift
+	
+3.create file system	
+ls /usr/sbin/mkfs	cheak available file system
+sudo mkfs.ext /dev/sdb1	
+	
+4.mount to dir	
+sudo mount /dev/sdb1 /mnt/public	
+sudo mount /dev/sdb1 /mnt/private	
+	
+5.modify file /etc/fstab	
+nano /etc/fstab	
+/dev/sdb1           /mnt/public  default 0 0	
+dev/sdb2            /mnt/pricate xfs   default 0 1	
+	
+option	
+For swap memory	
+sudo mkswap /dev/sdb3	
+sudo mksapon /dev/sdb3	
